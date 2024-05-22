@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+
+ 	<arg name="x_pos" default="1"/>
+	<arg name="y_pos" default="2"/>
+	<arg name="z_pos" default="0.5"/>
+	<arg name="roll" default="0"/>
+	<arg name="pitch" default="0"/>
+	<arg name="yaw" default="-3.1407"/>
+	<arg name="model" default="$(find robot)/urdf/robot.urdf.xacro"/>
+  	<arg name="rvizconfig" default="$(find robot)/rviz/mapping.rviz"/>
+										<!-- mpc  mapping display-->
+	<!-- load map -->
+	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+		<arg name="world_name" value="$(find model_plugin)/worlds/rectangle.world"/>
+    <!--  map  : c205_dynamic_object.world    c205 map_c205 empty squate rectangle -->
+
+		<!-- <arg name="world_name" value="$(find model_plugin)/worlds/c205_dynamic_object.world"/> -->
+		<arg name="paused" value="false"/>
+		<arg name="use_sim_time" value="true"/>
+		<arg name="gui" value="true"/>
+		<arg name="headless" value="false"/>
+		<arg name="debug" value="false"/>
+	</include>
+
+	<param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+	<!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/> -->
+	<node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model robotv1 -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -param robot_description"/>
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>
+
+</launch>

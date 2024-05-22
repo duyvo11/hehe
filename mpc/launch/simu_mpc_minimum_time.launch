@@ -1,0 +1,47 @@
+<launch>
+	<!-- argement -->
+	<arg name="map_file" default="$(find robot)/maps/rectangle.yaml"/>
+
+  	<arg name="model" default="$(find robot)/urdf/robot.urdf.xacro"/>
+
+	<arg name="move_forward_only" default="false"/>
+
+	<arg name="plot" default="false" />
+    <arg name="plot_states" default="false" />
+	<!-- node map sever -->
+	<node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+
+	        <!--  ************** Navigation ***************  -->
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+  	  	<rosparam file="$(find robot)/config/params_mpc/costmap_common_params.yaml" command="load" ns="global_costmap" />
+  	 	<rosparam file="$(find robot)/config/params_mpc/costmap_common_params.yaml" command="load" ns="local_costmap" />
+  		<rosparam file="$(find robot)/config/params_mpc/local_costmap_params.yaml" command="load" />
+  		<rosparam file="$(find robot)/config/params_mpc/global_costmap_params.yaml" command="load" />
+  		<rosparam file="$(find robot)/config/params_mpc/mpc_local_planner_params_minimum_time.yaml" command="load" />
+
+		<param name="base_global_planner" value="global_planner/GlobalPlanner" />
+
+		<param name="base_local_planner" value="mpc_local_planner/MpcLocalPlannerROS" />
+		<param name="controller_frequency" value="5.0" />
+		<param name="controller_patience" value="15.0" />
+
+		<!-- <param name="MpcLocalPlannerROS/controller/publish_ocp_results" value="true" if="$(arg plot)" /> -->
+	</node>
+
+	
+	<!-- AMCL -->
+	<include file="$(find robot)/launch/simu_amcl.launch"/>
+	<!-- move_base -->
+
+	<!-- **************** Plot ocp results ************** -->
+	<node name="ocp_result_plotter" pkg="mpc_local_planner" type="plot_optimal_control_results.py" output="screen" if="$(arg plot)">
+			<param name="ocp_result_topic" value="/move_base/MpcLocalPlannerROS/ocp_result"/>
+			<param name="plot_rate" value="5"/>
+			<param name="plot_states" value="$(arg plot_states)"/>
+	</node>	
+
+
+	
+</launch>
+

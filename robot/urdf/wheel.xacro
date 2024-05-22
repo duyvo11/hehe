@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  >
+
+
+<xacro:macro name="wheel" params="name reflect_x reflect_y reflect_r reflect_axis">
+
+  <!-- Wheel link -->
+    <link name="${name}_wheel">
+        <inertial>
+            <mass value="0.349857333784006" />
+        <inertia
+            ixx="0.000418595445575058" ixy="0.0" ixz="0.0"
+            iyy="0.000418594343453752" iyz="0.0"
+            izz="0.000774260555004611" />
+        </inertial>
+
+        <visual>
+            <geometry>
+                <mesh filename="package://robot/meshes/Wheel_Right.STL" />
+            </geometry>
+            <material name="orange"/>
+        </visual>
+
+        <collision>
+            <geometry>
+                <mesh filename="package://robot/meshes/Wheel_Right.STL" />
+            </geometry>
+        </collision>
+    </link>
+
+  <!-- Wheel joint -->
+  <joint name="${name}_wheel_joint" type="continuous">
+    <origin xyz="${reflect_x*0} ${reflect_y*0.1605} -0.00399999999999995" rpy=" ${reflect_r*1.5707963267949} 0 0" />
+    <parent link="base_link" />
+    <child link="${name}_wheel" />
+    <axis xyz="0 0 ${reflect_axis}" />
+  </joint>
+
+  <!-- Adding transmission to wheels -->
+  <transmission name="${name}_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    
+    <actuator name="${name}_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+
+    <joint name="${name}_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  
+  <gazebo reference="${name}_wheel">
+    <material>Gazebo/Orange</material>
+    <mu1 value="5.0"/>
+    <mu2 value="5.0"/>
+  </gazebo>
+</xacro:macro>
+
+</robot>
+  

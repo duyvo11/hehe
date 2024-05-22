@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/d/catkin_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/d/catkin_ws/src/global_planner/include/**",
+        "/home/d/catkin_ws/src/mpc_local_planner/mpc_local_planner/include/**",
+        "/home/d/catkin_ws/src/mpc_ros/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

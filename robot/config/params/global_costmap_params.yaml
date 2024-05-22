@@ -1,0 +1,19 @@
+global_costmap:
+  global_frame: map
+  robot_base_frame: base_footprint
+  # robot_base_frame: base_link
+# 
+  update_frequency: 45.0
+  publish_frequency: 45.0
+  transform_tolerance: 1
+
+  static_map: true
+  plugins:
+  - {name: static_layer,            type: "costmap_2d::StaticLayer"}
+  - {name: obstacle_layer,          type: "costmap_2d::VoxelLayer"}
+  - {name: inflation_layer,         type: "costmap_2d::InflationLayer"}
+
+  # Specifies whether or not to visualize the potential area computed via a PointCloud2. 
+  # visualize_potential: true 
+  # use_dijkstra: true
+ 
